@@ -1,17 +1,19 @@
 
 default: &default
   adapter: oracle_enhanced
-  database: //10.1.1.3:1521/XE
+  port: 1521
+  host: localhost
   username:
   password:
 
 development:
   <<: *default
-
+  database: csc_libray_app_dev
 test:
   <<: *default
-
+  database: csc_libray_app_test
 
 production:
   <<: *default
+  database: csc_libray_app_prod
 
