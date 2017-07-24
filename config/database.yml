@@ -1,19 +1,18 @@
-
 default: &default
   adapter: oracle_enhanced
+  database: orcl12c
+  host: 192.168.99.11
   port: 1521
-  host: localhost
-  username:
-  password:
+  username: system
+  password: oracle
 
 development:
   <<: *default
-  database: csc_libray_app_dev
+
 test:
   <<: *default
-  database: csc_libray_app_test
 
 production:
   <<: *default
-  database: csc_libray_app_prod
+
 
