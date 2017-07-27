@@ -1,0 +1,9 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  expiration_dt: 2017-07-26 21:25:32
+  user: one
+
+two:
+  expiration_dt: 2017-07-26 21:25:32
+  user: two

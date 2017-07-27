@@ -1,7 +1,7 @@
 default: &default
   adapter: oracle_enhanced
   database: orcl12c
-  host: 192.168.99.11
+  host: 192.168.99.12
   port: 1521
   username: system
   password: oracle

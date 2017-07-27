@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  class: 1
+  major: 
+  minor: 
+  user_id: one
+
+two:
+  class: 1
+  major: 
+  minor: 
+  user_id: two
