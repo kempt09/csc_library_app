@@ -127,7 +127,7 @@ ActiveRecord::Schema.define(version: 20170727025002) do
     t.integer "holding_section_id", precision: 38, null: false
     t.integer "item_id", precision: 38, null: false
     t.datetime "checkout_dt", precision: 6, null: false
-    t.datetime "checkin_dt", precision: 6, null: false
+    t.datetime "checkin_dt", precision: 6
     t.datetime "due_dt", precision: 6, null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
@@ -230,6 +230,8 @@ ActiveRecord::Schema.define(version: 20170727025002) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["email"], name: "index_users_on_email"
+    t.index ["first_name"], name: "index_users_on_first_name"
+    t.index ["last_name"], name: "index_users_on_last_name"
     t.index ["phone"], name: "index_users_on_phone"
   end
 

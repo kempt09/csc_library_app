@@ -1,22 +1,22 @@
 class StaffsController < ApplicationController
+  before_action :validate_user, :is_staff?
+  before_action :is_admin?, only: [:create, :update, :destroy]
   before_action :set_staff, only: [:show, :update, :destroy]
 
   # GET /staffs
   def index
-    @staffs = Staff.all
-
-    render json: @staffs
+    @staffs = Staff.all.paginate(page: page, per_page: per_page)
+    render json: @staffs, include: ['user']
   end
 
   # GET /staffs/1
   def show
-    render json: @staff
+    render json: @staff, include: ['user']
   end
 
   # POST /staffs
   def create
     @staff = Staff.new(staff_params)
-
     if @staff.save
       render json: @staff, status: :created, location: @staff
     else

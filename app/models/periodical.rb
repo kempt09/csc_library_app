@@ -1,6 +1,6 @@
 class Periodical < ApplicationRecord
   has_many :author_periodicals
-  has_many :author, through: :author_periodicals
+  has_many :authors, through: :author_periodicals
 
   has_one :holding_periodical
   has_one :holding, through: :holding_periodical
@@ -12,6 +12,26 @@ class Periodical < ApplicationRecord
 
   after_create :add_holding
   before_save :add_publisher, if: publisher_id_changed?
+
+  def available?
+    records = ActiveRecord::Base.connection.execute(
+      "
+        SELECT
+          count(*)
+        FROM
+          log_entries
+        WHERE
+          log_entries.holding_id = #{self.holding_id} AND
+          log_entries.item_id = #{self.id} AND
+          log_entries.checkin_dt IS NULL
+      "
+    ).to_a
+    if records[0]['count'] > 0
+      false
+    else
+      true
+    end
+  end
 
   private
 

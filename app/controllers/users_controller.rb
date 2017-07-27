@@ -1,22 +1,22 @@
 class UsersController < ApplicationController
+  before_action :validate_user
+  before_action :is_staff?, only: [:index, :create, :destroy]
   before_action :set_user, only: [:show, :update, :destroy]
 
   # GET /users
   def index
-    @users = User.all
-
-    render json: @users
+    @users = User.all.paginate(page: page, per_page: per_page)
+    render json: @users, include: ['staff', 'student', 'community_user']
   end
 
   # GET /users/1
   def show
-    render json: @user
+    render json: @user, include: ['staff', 'student', 'community_user', 'address']
   end
 
   # POST /users
   def create
     @user = User.new(user_params)
-
     if @user.save
       render json: @user, status: :created, location: @user
     else
@@ -41,7 +41,11 @@ class UsersController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_user
-      @user = User.find(params[:id])
+      if @current_user.staff?
+        @user = User.find(params[:id])
+      else
+        @user = User.where(id: @current_user.id).first
+      end
     end
 
     # Only allow a trusted parameter "white list" through.

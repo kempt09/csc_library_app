@@ -1,16 +1,17 @@
 class AddressesController < ApplicationController
+  before_action :validate_user
+  before_action :is_staff?, only: [:index, :destroy]
   before_action :set_address, only: [:show, :update, :destroy]
 
   # GET /addresses
   def index
-    @addresses = Address.all
-
-    render json: @addresses
+    @addresses = Address.all.paginate(page: page, per_page: per_page)
+    render json: @addresses, include: ['user']
   end
 
   # GET /addresses/1
   def show
-    render json: @address
+    render json: @address, include: ['user']
   end
 
   # POST /addresses
@@ -41,7 +42,12 @@ class AddressesController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_address
-      @address = Address.find(params[:id])
+      if @current_user.staff?
+        @address = Address.find(params[:id])
+      else
+        @address = Address.where(id: params[:id], :user_id => @current_user.id).first
+      end
+
     end
 
     # Only allow a trusted parameter "white list" through.

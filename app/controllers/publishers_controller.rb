@@ -1,16 +1,16 @@
 class PublishersController < ApplicationController
+  before_action :validate_user, :is_staff?
   before_action :set_publisher, only: [:show, :update, :destroy]
 
   # GET /publishers
   def index
-    @publishers = Publisher.all
-
+    @publishers = Publisher.all.paginate(page: page, per_page: per_page)
     render json: @publishers
   end
 
   # GET /publishers/1
   def show
-    render json: @publisher
+    render json: @publisher, include: ['circulations', 'references', 'periodicals']
   end
 
   # POST /publishers
@@ -41,7 +41,7 @@ class PublishersController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_publisher
-      @publisher = Publisher.find(params[:id])
+      @publisher = Publisher.includes(:references, :periodicals, :circulations).find(params[:id])
     end
 
     # Only allow a trusted parameter "white list" through.

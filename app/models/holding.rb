@@ -14,4 +14,17 @@ class Holding < ApplicationRecord
   validates :title, presence: true, uniqueness: true
   validates :section, presence: true, :inclusion => { :in => ['CIR', 'REF', 'PER'] }
 
+  def find_item(id)
+    case self.sections
+      when 'REF'
+        Reference.find(id)
+      when 'PER'
+        Periodical.find(id)
+      when 'CIR'
+        Circulation.find(id)
+      else
+        raise 'Item Not Found'
+    end
+  end
+
 end

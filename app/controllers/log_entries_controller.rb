@@ -1,16 +1,17 @@
 class LogEntriesController < ApplicationController
+  before_action :validate_user
+  before_action :is_staff?, only: [:create, :update, :destroy]
   before_action :set_log_entry, only: [:show, :update, :destroy]
 
   # GET /log_entries
   def index
-    @log_entries = LogEntry.all
-
-    render json: @log_entries
+    @log_entries = LogEntry.all.includes(:user, :holding).paginate(page: page, per_page: per_page)
+    render json: @log_entries, include: ['user', 'holding']
   end
 
   # GET /log_entries/1
   def show
-    render json: @log_entry
+    render json: @log_entry, include: ['user', 'holding']
   end
 
   # POST /log_entries
@@ -41,7 +42,7 @@ class LogEntriesController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_log_entry
-      @log_entry = LogEntry.find(params[:id])
+      @log_entry = LogEntry.includes(:user, :holding).find(params[:id])
     end
 
     # Only allow a trusted parameter "white list" through.

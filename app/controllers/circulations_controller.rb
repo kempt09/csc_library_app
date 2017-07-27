@@ -1,16 +1,16 @@
 class CirculationsController < ApplicationController
+  before_action :validate_user, :is_staff?
   before_action :set_circulation, only: [:show, :update, :destroy]
 
   # GET /circulations
   def index
-    @circulations = Circulation.all
-
+    @circulations = Circulation.all.paginate(page: page, per_page: per_page)
     render json: @circulations
   end
 
   # GET /circulations/1
   def show
-    render json: @circulation
+    render json: @circulation, include: ['circulations', 'periodicals', 'references']
   end
 
   # POST /circulations
@@ -41,7 +41,7 @@ class CirculationsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_circulation
-      @circulation = Circulation.find(params[:id])
+      @circulation = Circulation.includes(:authors, :publisher, :holding).find(params[:id])
     end
 
     # Only allow a trusted parameter "white list" through.

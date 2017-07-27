@@ -1,16 +1,16 @@
 class PeriodicalsController < ApplicationController
+  before_action :validate_user, :is_staff?
   before_action :set_periodical, only: [:show, :update, :destroy]
 
   # GET /periodicals
   def index
-    @periodicals = Periodical.all
-
+    @periodicals = Periodical.all.paginate(page: page, per_page: per_page)
     render json: @periodicals
   end
 
   # GET /periodicals/1
   def show
-    render json: @periodical
+    render json: @periodical, include: ['authors', 'publisher', 'holding']
   end
 
   # POST /periodicals
@@ -41,7 +41,7 @@ class PeriodicalsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_periodical
-      @periodical = Periodical.find(params[:id])
+      @periodical = Periodical.includes(:authors, :publisher, :holding).find(params[:id])
     end
 
     # Only allow a trusted parameter "white list" through.

@@ -1,16 +1,17 @@
 class CommunityUsersController < ApplicationController
+  before_action :validate_user, :is_staff?
   before_action :set_community_user, only: [:show, :update, :destroy]
 
   # GET /community_users
   def index
-    @community_users = CommunityUser.all
+    @community_users = CommunityUser.all.paginate(page: page, per_page: per_page)
 
-    render json: @community_users
+    render json: @community_users, include: ['user']
   end
 
   # GET /community_users/1
   def show
-    render json: @community_user
+    render json: @community_user, include: ['user']
   end
 
   # POST /community_users

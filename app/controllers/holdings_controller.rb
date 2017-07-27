@@ -1,16 +1,17 @@
 class HoldingsController < ApplicationController
+  before_action :validate_user, :is_staff?
+  before_action :is_admin?, only: [:create, :update, :destroy]
   before_action :set_holding, only: [:show, :update, :destroy]
 
   # GET /holdings
   def index
-    @holdings = Holding.all
-
+    @holdings = Holding.all.paginate(page: page, per_page: per_page)
     render json: @holdings
   end
 
   # GET /holdings/1
   def show
-    render json: @holding
+    render json: @holding, include: ['circulations', 'references', 'periodicals']
   end
 
   # POST /holdings
@@ -41,7 +42,7 @@ class HoldingsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_holding
-      @holding = Holding.find(params[:id])
+      @holding = Holding.includes(:periodicals, :references, :circulations).find(params[:id])
     end
 
     # Only allow a trusted parameter "white list" through.

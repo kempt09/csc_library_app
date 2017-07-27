@@ -6,14 +6,6 @@ class Student < ApplicationRecord
 
   after_save :add_user
 
-  def create_checkout(item)
-
-  end
-
-  def create_checkin(item)
-
-  end
-
   private
 
   def add_user

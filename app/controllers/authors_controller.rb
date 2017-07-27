@@ -1,16 +1,16 @@
 class AuthorsController < ApplicationController
+  before_action :validate_user, :is_staff?
   before_action :set_author, only: [:show, :update, :destroy]
 
   # GET /authors
   def index
-    @authors = Author.all
-
+    @authors = Author.all.paginate(page: page, per_page: per_page)
     render json: @authors
   end
 
   # GET /authors/1
   def show
-    render json: @author
+    render json: @author, includes: ['circulations', 'references', 'periodicals']
   end
 
   # POST /authors
@@ -41,7 +41,7 @@ class AuthorsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_author
-      @author = Author.find(params[:id])
+      @author = Author.includes(:references, :circulations, :periodicals).find(params[:id])
     end
 
     # Only allow a trusted parameter "white list" through.

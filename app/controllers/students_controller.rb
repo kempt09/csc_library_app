@@ -1,16 +1,17 @@
 class StudentsController < ApplicationController
+  before_action :validate_user, :is_staff?
   before_action :set_student, only: [:show, :update, :destroy]
 
   # GET /students
   def index
-    @students = Student.all
+    @students = Student.all.paginate(page: page, per_page: per_page)
 
-    render json: @students
+    render json: @students, include: ['user']
   end
 
   # GET /students/1
   def show
-    render json: @student
+    render json: @student, include: ['user']
   end
 
   # POST /students

@@ -1,16 +1,16 @@
 class ReferencesController < ApplicationController
+  before_action :validate_user, :is_staff?
   before_action :set_reference, only: [:show, :update, :destroy]
 
   # GET /references
   def index
-    @references = Reference.all
-
+    @references = Reference.all.paginate(page: page, per_page: per_page)
     render json: @references
   end
 
   # GET /references/1
   def show
-    render json: @reference
+    render json: @reference, include: ['authors', 'publisher', 'holding']
   end
 
   # POST /references
@@ -41,7 +41,7 @@ class ReferencesController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_reference
-      @reference = Reference.find(params[:id])
+      @reference = Reference.includes(:authors, :publisher, :holding).find(params[:id])
     end
 
     # Only allow a trusted parameter "white list" through.

@@ -18,11 +18,12 @@ class User < ApplicationRecord
     self.hashed_password = Password.create(password)
     if self.save
       UserMailer.send_password(self.email, password, self.first_name)
+    else
+      raise 'Error Sending Password'
     end
   end
 
   def update_token
-    self.hashed_password = Password.create(SecureRandom.base64(8))
     secret = Rails.secrets['secret_key_base']
     t = Time.now.utc + 5200000
     self.token = JWT.encode({email: self.email, exp: t.to_i}, secret)
@@ -43,6 +44,95 @@ class User < ApplicationRecord
 
   def address?
     self.address != nil ? true : false
+  end
+
+  def overdue_books?
+    records = ActiveRecord::Base.connection.execute(
+      "
+        SELECT
+          count(*)
+        FROM
+          log_entries
+        WHERE
+          log_entries.user_id = #{self.id} AND
+          log_entries.due_dt < #{Time.now} AND
+          log_entries.checkin_dt IS NULL
+      "
+    ).to_a
+
+    if records[0]['count'] > 0
+      true
+    else
+      false
+    end
+  end
+
+  def create_checkout(item)
+
+    if self.overdue_books?
+      raise 'Overdue Books: Not Allowed To Check Out'
+    end
+
+    due_dt = item.holding.section != 'CIR' ? Time.now + 4.hours : Time.now + 12.weeks
+
+    if item.holding.section == 'PER'
+      records = ActiveRecord::Base.connection.execute(
+        "
+        SELECT
+          count(*)
+        FROM
+          log_entries
+        WHERE
+          log_entries.holding_id = #{self.holding_id} AND
+          log_entries.user_id = #{self.id} AND
+          log_entries.checkin_dt IS NULL
+      "
+      ).to_a
+
+      if records[0]['count'] >= 5
+        raise 'Max Periodicals Reached'
+      end
+
+    end
+
+    if item.holding.section == 'REF'
+      records = ActiveRecord::Base.connection.execute(
+        "
+        SELECT
+          count(*)
+        FROM
+          log_entries
+        WHERE
+          log_entries.holding_id = #{self.holding_id} AND
+          log_entries.user_id = #{self.id} AND
+          log_entries.checkin_dt IS NULL
+      "
+      ).to_a
+
+      if records[0]['count'] >= 3
+        raise 'Max References Reached'
+      end
+
+    end
+
+    LogEntry.create(
+      :user_id => self.id,
+      :holding_id => item[:holding_id],
+      :item_id => item[:id],
+      :checkout_dt => Time.now,
+      :checkin_dt => nil,
+      :due_dt => due_dt
+    )
+
+  end
+
+  def create_checkin(item)
+    log_entry = LogEntry.where(:user_id =>  self.id, :holding_id => item[:holding_id], :item_id => item[:id], :checkin_dt => nil).first
+    if log_entry != nil
+      log_entry.update(:checkin_dt => Time.now)
+    else
+      raise 'No Log Exists For This Book'
+    end
   end
 
   private
