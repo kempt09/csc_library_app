@@ -12,19 +12,23 @@ class User < ApplicationRecord
 
   has_many :user_log_entries
   has_many :log_entries, through: :user_log_entries
+  has_one :student
+  has_one :community_user
+  has_one :staff
+  has_one :address
 
   def send_password
     password = SecureRandom.base64(8)
     self.hashed_password = Password.create(password)
     if self.save
-      UserMailer.send_password(self.email, password, self.first_name)
+      UserMailer.send_password(self.email, password, self.first_name).deliver_now
     else
       raise 'Error Sending Password'
     end
   end
 
   def update_token
-    secret = Rails.secrets['secret_key_base']
+    secret = Rails.application.secrets[:secret_key_base]
     t = Time.now.utc + 5200000
     self.token = JWT.encode({email: self.email, exp: t.to_i}, secret)
     self.save
@@ -150,9 +154,6 @@ class User < ApplicationRecord
   end
 
   def clean_up
-    if self.address?
-      self.address.destroy
-    end
     if self.student?
       self.student.destroy
     end
@@ -161,6 +162,9 @@ class User < ApplicationRecord
     end
     if self.community_user?
       self.community_user.destroy
+    end
+    if self.address?
+      self.address.destroy
     end
     self.log_entries.each do |log|
       log.destroy

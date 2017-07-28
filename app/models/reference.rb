@@ -1,6 +1,6 @@
 class Reference < ApplicationRecord
   has_many :author_references
-  has_many :authors, through: :author_references
+  has_many :authors, through: :author_references, before_add: :validate_limit
 
   has_one :holding_reference
   has_one :holding, through: :holding_reference
@@ -35,14 +35,18 @@ class Reference < ApplicationRecord
 
   private
 
-  def add_holding
-    self.holding = Holding.where(id: self.holding_id).first
-  end
-
-  def add_publisher
-    if self.publisher_id != nil
-      self.publisher = Publisher.where(id: self.publisher_id).first
+    def validate_limit
+      raise Exception.new if self.authors.size >= 3
     end
-  end
+
+    def add_holding
+      self.holding = Holding.where(id: self.holding_id).first
+    end
+
+    def add_publisher
+      if self.publisher_id != nil
+        self.publisher = Publisher.where(id: self.publisher_id).first
+      end
+    end
 
 end

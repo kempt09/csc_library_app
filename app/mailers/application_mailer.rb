@@ -1,3 +1,3 @@
 class ApplicationMailer < ActionMailer::Base
-  default from: "info@csc-library.com"
+  default from: "info@csclibrary.com"
 end

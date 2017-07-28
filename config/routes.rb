@@ -5,6 +5,7 @@ Rails.application.routes.draw do
   post 'send_password' => 'utilities#send_password'
   get 'history' => 'utilities#history'
   get 'inventory' => 'utilities#inventory'
+  # get 'seed' => 'application#seed'
   resources :publishers
   resources :references
   resources :periodicals

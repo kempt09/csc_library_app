@@ -1,6 +1,6 @@
 class Periodical < ApplicationRecord
   has_many :author_periodicals
-  has_many :authors, through: :author_periodicals
+  has_many :authors, through: :author_periodicals, before_add: :validate_limit
 
   has_one :holding_periodical
   has_one :holding, through: :holding_periodical
@@ -34,6 +34,10 @@ class Periodical < ApplicationRecord
   end
 
   private
+
+  def validate_limit
+    raise Exception.new if self.authors.size >= 3
+  end
 
   def add_holding
     self.holding = Holding.where(id: self.holding_id).first

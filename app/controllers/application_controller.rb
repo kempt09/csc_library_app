@@ -4,6 +4,16 @@ class ApplicationController < ActionController::API
     render json: { errors: { message: 'Not Found'}}, status: :not_found
   end
 
+  # def seed
+  #   begin
+  #     SeedService.seed
+  #   rescue StandardError => e
+  #     render json: {errors: e}, status: :unprocessable_entity
+  #     return
+  #   end
+  #   render json: {message: 'Success'}, status: :ok
+  # end
+
   private
 
   def page

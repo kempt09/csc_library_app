@@ -200,7 +200,7 @@ ActiveRecord::Schema.define(version: 20170727025002) do
   end
 
   create_table "students", force: :cascade do |t|
-    t.integer "class", precision: 38, default: 1, null: false
+    t.integer "student_class", precision: 38, default: 1, null: false
     t.string "major", null: false
     t.string "minor"
     t.integer "user_id", limit: 19, precision: 19

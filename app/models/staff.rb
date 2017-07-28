@@ -6,11 +6,4 @@ class Staff < ApplicationRecord
 
   enum role: [:super_admin, :admin, :worker]
 
-  after_save :add_user
-
-  private
-
-    def add_user
-      self.user = User.where(id: self.user_id).first
-    end
 end

@@ -3,7 +3,7 @@ class Circulation < ApplicationRecord
   has_one :holding, through: :holding_circulation
 
   has_many :author_circulations
-  has_many :authors, through: :author_circulations
+  has_many :authors, through: :author_circulations, before_add: :validate_limit
 
   has_one :publisher_circulation
   has_one :publisher, through: :publisher_circulation
@@ -34,6 +34,10 @@ class Circulation < ApplicationRecord
   end
 
   private
+
+    def validate_limit
+      raise Exception.new if self.authors.size >= 3
+    end
 
     def add_holding
       self.holding = Holding.where(id: self.holding_id).first
