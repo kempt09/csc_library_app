@@ -1,5 +1,5 @@
 class StaffsController < ApplicationController
-  before_action :validate_user, :is_staff?,
+  before_action :validate_user, :is_staff?
   before_action :set_staff, only: [:show, :update, :destroy]
 
   # GET /staffs
