@@ -1,6 +1,5 @@
 class StaffsController < ApplicationController
-  before_action :validate_user, :is_staff?
-  before_action :is_admin?, only: [:create, :update, :destroy]
+  before_action :validate_user, :is_staff?,
   before_action :set_staff, only: [:show, :update, :destroy]
 
   # GET /staffs
@@ -46,6 +45,6 @@ class StaffsController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def staff_params
-      params.require(:data).permit({attributes: [:rank, :role, :created_at, :updated_at]})
+      params.require(:data).permit({attributes: [:rank, :role, :user_id, :created_at, :updated_at]})
     end
 end

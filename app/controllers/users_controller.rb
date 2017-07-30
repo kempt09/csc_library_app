@@ -5,7 +5,7 @@ class UsersController < ApplicationController
 
   # GET /users
   def index
-    @users = User.all.paginate(page: page, per_page: per_page)
+    @users = User.all.paginate(page: page, per_page: per_page).order({last_name: :asc, first_name: :asc})
     render json: @users, include: ['staff', 'student', 'community_user']
   end
 
@@ -20,7 +20,7 @@ class UsersController < ApplicationController
     if @user.save
       render json: @user, status: :created, location: @user
     else
-      render json: @user.errors, status: :unprocessable_entity
+      render json: { errors: [ @user.errors ] }, status: :unprocessable_entity
     end
   end
 

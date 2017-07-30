@@ -9,6 +9,8 @@ class SeedService
       :user_type => 'STA'
     )
 
+    staff.hash_password('password')
+
     student = User.create(
       :first_name => 'Whitney',
       :last_name => 'Kempton',

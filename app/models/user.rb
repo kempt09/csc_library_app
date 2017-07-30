@@ -8,7 +8,7 @@ class User < ApplicationRecord
   before_create :init_user
   before_save :format_attrs_on_save
   after_create :send_password, :update_token
-  after_destroy :clean_up
+  before_destroy :clean_up
 
   has_many :user_log_entries
   has_many :log_entries, through: :user_log_entries
@@ -16,6 +16,11 @@ class User < ApplicationRecord
   has_one :community_user
   has_one :staff
   has_one :address
+
+  def hash_password(password)
+    self.hashed_password = Password.create(password)
+    self.save!
+  end
 
   def send_password
     password = SecureRandom.base64(8)

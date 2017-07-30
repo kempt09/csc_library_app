@@ -1,6 +1,5 @@
 class HoldingsController < ApplicationController
   before_action :validate_user, :is_staff?
-  before_action :is_admin?, only: [:create, :update, :destroy]
   before_action :set_holding, only: [:show, :update, :destroy]
 
   # GET /holdings

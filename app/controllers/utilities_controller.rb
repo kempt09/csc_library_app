@@ -1,26 +1,31 @@
 class UtilitiesController < ApplicationController
   before_action :validate_user, :is_staff?, except: [:token]
 
+  include BCrypt
   def token
     email = params[:email]
     password = params[:password]
     begin
       user = User.where(email: email).first
       if Password.new(user[:hashed_password]) == password && user[:active]
-        user = user.update_token
-        render json: {
-          data: {
-            user: user,
-            isStaff: user.staff?,
-            isStudent: user.student?,
-            isCommunityUser: user.community_user?
+        if user.update_token
+          render json: {
+            data: {
+              user: user,
+              address: user.address,
+              isStaff: user.staff?,
+              isStudent: user.student?,
+              isCommunityUser: user.community_user?
+            }
           }
-        }
+        else
+          raise 'Error Signing In'
+        end
       else
-        render json: { errors: [{message: 'Unauthorized'}]}, status: :unathorized
+        render json: { errors: [{message: 'Unauthorized'}]}, status: :unauthorized
       end
-    rescue StandardError
-      render json: { errors: [{message: 'Unauthorized'}]}, status: :unathorized
+    rescue StandardError => e
+      render json: { errors: [{message: 'Unauthorized'}]}, status: :unauthorized
     end
   end
 
