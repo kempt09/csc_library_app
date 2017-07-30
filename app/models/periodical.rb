@@ -11,7 +11,7 @@ class Periodical < ApplicationRecord
   validates :title, :volume, :volume_no, :holding_id, presence: true
 
   after_create :add_holding
-  before_save :add_publisher, if: publisher_id_changed?
+  before_save :add_publisher
 
   def available?
     records = ActiveRecord::Base.connection.execute(
