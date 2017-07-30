@@ -4,7 +4,7 @@ class SeedService
     staff = User.create(
       :first_name => 'Chris',
       :last_name => 'Kempton',
-      :email => 'kempton-staff@gmail.com',
+      :email => 'kempt09@gmail.com',
       :phone => '0000000000',
       :user_type => 'STA'
     )
@@ -44,7 +44,7 @@ class SeedService
     staff = User.create(
       :first_name => 'David',
       :last_name => 'Agustin',
-      :email => 'david-staff@gmail.com',
+      :email => 'davidsyagustin@gmail.com',
       :phone => '4444444444',
       :user_type => 'STA'
     )
@@ -81,7 +81,7 @@ class SeedService
     staff = User.create(
       :first_name => 'Chris',
       :last_name => 'Romano',
-      :email => 'chris-staff@gmail.com',
+      :email => 'cromano@lji.org',
       :phone => '1112223333',
       :user_type => 'STA'
     )
@@ -118,7 +118,7 @@ class SeedService
     staff = User.create(
       :first_name => 'Dominic',
       :last_name => 'Stafford',
-      :email => 'dominic-staff@gmail.com',
+      :email => 'dominicstaffordd@yahoo.com ',
       :phone => '4443332222',
       :user_type => 'STA'
     )
