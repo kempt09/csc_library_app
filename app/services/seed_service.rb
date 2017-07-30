@@ -12,7 +12,7 @@ class SeedService
     staff.hash_password('password')
 
     student = User.create(
-      :first_name => 'Whitney',
+      :first_name => 'Chris',
       :last_name => 'Kempton',
       :email => 'kemptondesigns@gmail.com',
       :phone => '1111111111',
