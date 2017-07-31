@@ -15,9 +15,13 @@ class PeriodicalsController < ApplicationController
 
   # POST /periodicals
   def create
+    authors = params[:data][:relationships][:authors][:data]
     @periodical = Periodical.new(periodical_params)
 
     if @periodical.save
+      authors.each do |author|
+        AuthorCirculation.create(:circulation_id => @periodical.id, :author_id => author[:id])
+      end
       render json: @periodical, status: :created, location: @periodical
     else
       render json: @periodical.errors, status: :unprocessable_entity

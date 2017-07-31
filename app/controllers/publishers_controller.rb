@@ -4,7 +4,11 @@ class PublishersController < ApplicationController
 
   # GET /publishers
   def index
-    @publishers = Publisher.all.paginate(page: page, per_page: per_page)
+    if params[:include_all] === 'true'
+      @publishers = Publisher.all
+    else
+      @publishers = Publisher.all.paginate(page: page, per_page: per_page)
+    end
     render json: @publishers
   end
 

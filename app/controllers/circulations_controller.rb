@@ -15,9 +15,12 @@ class CirculationsController < ApplicationController
 
   # POST /circulations
   def create
+    authors = params[:data][:relationships][:authors][:data]
     @circulation = Circulation.new(circulation_params)
-
     if @circulation.save
+      authors.each do |author|
+        AuthorCirculation.create(:circulation_id => @circulation.id, :author_id => author[:id])
+      end
       render json: @circulation, status: :created, location: @circulation
     else
       render json: @circulation.errors, status: :unprocessable_entity

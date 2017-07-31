@@ -5,7 +5,29 @@ class UsersController < ApplicationController
 
   # GET /users
   def index
-    @users = User.all.paginate(page: page, per_page: per_page).order({last_name: :asc, first_name: :asc})
+    hash = {}
+
+    if params[:user_type] != nil && params[:user_type] != ''
+      hash['user_type'] = params[:user_type]
+    end
+
+    if params[:email] != nil && params[:email] != ''
+      hash[:email] = params[:email]
+    end
+
+    if params[:first_name] != nil && params[:first_name] != ''
+      hash[:first_name] = params[:first_name]
+    end
+
+    if params[:last_name] != nil && params[:last_name] != ''
+      hash[:last_name] = params[:last_name]
+    end
+
+    if params[:phone] != nil && params[:phone] != ''
+      hash[:phone]  = params[:phone]
+    end
+
+    @users = User.where(hash).paginate(page: page, per_page: per_page).order({last_name: :asc, first_name: :asc})
     render json: @users, include: ['staff', 'student', 'community_user']
   end
 

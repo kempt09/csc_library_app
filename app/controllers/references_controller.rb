@@ -15,9 +15,13 @@ class ReferencesController < ApplicationController
 
   # POST /references
   def create
+    authors = params[:data][:relationships][:authors][:data]
     @reference = Reference.new(reference_params)
 
     if @reference.save
+      authors.each do |author|
+        AuthorCirculation.create(:circulation_id => @referece.id, :author_id => author[:id])
+      end
       render json: @reference, status: :created, location: @reference
     else
       render json: @reference.errors, status: :unprocessable_entity

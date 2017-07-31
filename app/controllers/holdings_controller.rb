@@ -10,7 +10,17 @@ class HoldingsController < ApplicationController
 
   # GET /holdings/1
   def show
-    render json: @holding, include: ['circulations', 'references', 'periodicals']
+    render json: @holding, include: [
+      'circulations',
+      'circulations.authors',
+      'circulations.publisher',
+      'references',
+      'references.authors',
+      'references.publisher',
+      'periodicals',
+      'periodicals.authors',
+      'periodicals.publisher'
+    ]
   end
 
   # POST /holdings
@@ -41,7 +51,11 @@ class HoldingsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_holding
-      @holding = Holding.includes(:periodicals, :references, :circulations).find(params[:id])
+      @holding = Holding.includes(
+        {circulations: [:authors, :publisher]},
+        {references: [:authors, :publisher]},
+        {periodicals: [:authors, :publisher]}
+      ).find(params[:id])
     end
 
     # Only allow a trusted parameter "white list" through.

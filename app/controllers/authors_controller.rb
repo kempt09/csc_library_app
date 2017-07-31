@@ -4,7 +4,19 @@ class AuthorsController < ApplicationController
 
   # GET /authors
   def index
-    @authors = Author.all.paginate(page: page, per_page: per_page)
+    if params[:include_all] === 'true'
+      @authors = Author.all
+    else
+      hash =  {}
+      if params[:first_name] != nil && params[:first_name] != ''
+        hash[:first_name] = params[:first_name]
+      end
+
+      if params[:last_name] != nil && params[:last_name] != ''
+        hash[:last_name] = params[:last_name]
+      end
+      @authors = Author.where(hash).paginate(page: page, per_page: per_page).order(last_name: :asc, first_name: :asc)
+    end
     render json: @authors
   end
 
