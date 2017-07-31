@@ -50,6 +50,6 @@ class PublishersController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def publisher_params
-      params.require(:data).permit({attributes: [:name, :created_at, :updated_at]})
+      params.require(:data).permit({attributes: [:name]})
     end
 end

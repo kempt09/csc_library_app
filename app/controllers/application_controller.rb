@@ -30,6 +30,27 @@ class ApplicationController < ActionController::API
     end
   end
 
+  def validate_staff
+    begin
+      token = request.headers['Authorization'].split(' ').last
+      user = User.where(token: token).first
+      if user == nil
+        render json: { errors: { message: 'Unauthorized'}}, status: :unauthorized
+        return
+      else
+        if user.staff?
+          @current_user = user
+        else
+          render json: { errors: { message: 'Unauthorized'}}, status: :unauthorized
+          return
+        end
+      end
+    rescue StandardError => e
+      render json: { errors: { message: 'Unauthorized'}}, status: :unauthorized
+      return
+    end
+  end
+
   def is_staff?
     unless @current_user.staff?
       render json: {errors: { message: 'Unauthorized'}}, status: :unauthorized

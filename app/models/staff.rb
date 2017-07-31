@@ -6,4 +6,14 @@ class Staff < ApplicationRecord
 
   enum role: [:super_admin, :admin, :worker]
 
+  after_create :update_user
+
+  private
+
+    def update_user
+      user = User.where(id: self.user_id).first
+      user.update(:user_type => 'STA')
+    end
+
+
 end

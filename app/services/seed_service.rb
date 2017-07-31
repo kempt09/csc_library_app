@@ -118,7 +118,7 @@ class SeedService
     staff = User.create(
       :first_name => 'Dominic',
       :last_name => 'Stafford',
-      :email => 'dominicstaffordd@yahoo.com ',
+      :email => 'dominicstaffordd@yahoo.com',
       :phone => '4443332222',
       :user_type => 'STA'
     )
@@ -162,6 +162,15 @@ class SeedService
       record.destroy
     end
     CommunityUser.all.each do |record|
+      record.destroy
+    end
+    Circulation.all.each do |record|
+      record.destroy
+    end
+    Reference.all.each do |record|
+      record.destroy
+    end
+    Periodical.all.each do |record|
       record.destroy
     end
     Holding.all.each do |record|

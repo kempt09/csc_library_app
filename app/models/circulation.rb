@@ -46,6 +46,8 @@ class Circulation < ApplicationRecord
     def add_publisher
       if self.publisher_id != nil
         self.publisher = Publisher.where(id: self.publisher_id).first
+      else
+        self.publisher = nil
       end
     end
 

@@ -47,6 +47,6 @@ class CommunityUsersController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def community_user_params
-      params.require(:data).permit({attributes: [:expiration_dt, :user_id, :created_at, :updated_at]})
+      params.require(:data).permit({attributes: [:expiration_dt, :user_id]})
     end
 end

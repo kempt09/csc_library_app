@@ -1,5 +1,6 @@
 class UtilitiesController < ApplicationController
-  before_action :validate_user, :is_staff?, except: [:token]
+  before_action :validate_staff, except: [:token, :send_password, :customer_history]
+  before_action :validate_user, only: [:send_password, :customer_history]
 
   include BCrypt
   def token
@@ -61,14 +62,12 @@ class UtilitiesController < ApplicationController
 
   def inventory
     begin
-      items = LogEntry.includes(:holding)
-                .where(:user_id => params[id], checkin_dt: nil)
-                .paginate(page: page, per_page: per_page)
-                .order(updated_dt: :desc)
+      items = LogEntry.includes(:holding, :user).where(checkin_dt: nil).order(checkin_dt: :desc)
       collection = []
       items.each do |item|
         collection << {
           log_entry: item,
+          user: item.user,
           holding: item.holding,
           item: item.holding_item
         }
@@ -79,14 +78,12 @@ class UtilitiesController < ApplicationController
     end
   end
 
-  def history
+  def customer_history
     begin
-      start_dt = Time.now.beginning_of_year
-      end_dt = Time.now
       items = LogEntry.includes(:holding)
-                .where(:user_id => params[id], checkin_dt: start_dt..end_dt)
+                .where(:user_id => @current_user.id)
                 .paginate(page: page, per_page: per_page)
-                .order(updated_dt: :desc)
+                .order(id: :desc)
       collection = []
       items.each do |item|
         collection << {
@@ -103,8 +100,7 @@ class UtilitiesController < ApplicationController
 
   def send_password
     begin
-      user = User.find(params[:id])
-      user.send_password
+      @current_user.send_password
       render json: { message: 'Email Sent'}, status: :ok
     rescue StandardError => e
       render json: { errors: {message: e}}, status: :unprocessable_entity

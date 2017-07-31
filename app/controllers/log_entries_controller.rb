@@ -47,6 +47,6 @@ class LogEntriesController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def log_entry_params
-      params.require(:data).permit({attributes: [:user_id, :holding_id, :item_id, :checkout_dt, :checkin_dt, :due_dt, :created_at, :updated_at]})
+      params.require(:data).permit({attributes: [:user_id, :holding_id, :item_id, :checkout_dt, :checkin_dt, :due_dt]})
     end
 end

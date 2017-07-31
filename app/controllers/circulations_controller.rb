@@ -49,6 +49,6 @@ class CirculationsController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def circulation_params
-      params.require(:data).permit({attributes: [:title, :subtitle, :cost, :publisher_id, :holding_id, :created_at, :updated_at]})
+      params.require(:data).permit({attributes: [:title, :subtitle, :cost, :publisher_id, :holding_id]})
     end
 end

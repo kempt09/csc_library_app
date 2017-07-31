@@ -35,18 +35,20 @@ class Periodical < ApplicationRecord
 
   private
 
-  def validate_limit
-    raise Exception.new if self.authors.size >= 3
-  end
-
-  def add_holding
-    self.holding = Holding.where(id: self.holding_id).first
-  end
-
-  def add_publisher
-    if self.publisher_id != nil
-      self.publisher = Publisher.where(id: self.publisher_id).first
+    def validate_limit
+      raise Exception.new if self.authors.size >= 3
     end
-  end
+
+    def add_holding
+      self.holding = Holding.where(id: self.holding_id).first
+    end
+
+    def add_publisher
+      if self.publisher_id != nil
+        self.publisher = Publisher.where(id: self.publisher_id).first
+      else
+        self.publisher = nil
+      end
+    end
 
 end
