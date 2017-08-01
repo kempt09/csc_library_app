@@ -56,20 +56,10 @@ class User < ApplicationRecord
   end
 
   def overdue_books?
-    records = ActiveRecord::Base.connection.execute(
-      "
-        SELECT
-          count(*)
-        FROM
-          log_entries
-        WHERE
-          log_entries.user_id = #{self.id} AND
-          log_entries.due_dt < #{Time.now} AND
-          log_entries.checkin_dt IS NULL
-      "
-    ).to_a
-
-    if records[0]['count'] > 0
+    start_dt = Time.now
+    end_dt = Time.now + 20.years
+    records = LogEntry.where(:user_id => self.id, :checkin_dt => nil, :due_dt => start_dt..end_dt).count
+    if records > 0
       true
     else
       false
@@ -82,43 +72,19 @@ class User < ApplicationRecord
       raise 'Overdue Books: Not Allowed To Check Out'
     end
 
-    due_dt = item.holding.section != 'CIR' ? Time.now + 4.hours : Time.now + 12.weeks
+    due_dt = item.holding.section != 'CIR' ? Time.now + 4.hours : Time.now + 2.weeks
 
     if item.holding.section == 'PER'
-      records = ActiveRecord::Base.connection.execute(
-        "
-        SELECT
-          count(*)
-        FROM
-          log_entries
-        WHERE
-          log_entries.holding_id = #{self.holding_id} AND
-          log_entries.user_id = #{self.id} AND
-          log_entries.checkin_dt IS NULL
-      "
-      ).to_a
-
-      if records[0]['count'] >= 5
+      records = LogEntry.where(:holding_id => item.holding_id, :item_id => item.id, :checkin_dt => nil).count
+      if records >= 5
         raise 'Max Periodicals Reached'
       end
 
     end
 
     if item.holding.section == 'REF'
-      records = ActiveRecord::Base.connection.execute(
-        "
-        SELECT
-          count(*)
-        FROM
-          log_entries
-        WHERE
-          log_entries.holding_id = #{self.holding_id} AND
-          log_entries.user_id = #{self.id} AND
-          log_entries.checkin_dt IS NULL
-      "
-      ).to_a
-
-      if records[0]['count'] >= 3
+      records = LogEntry.where(:holding_id => item.holding_id, :item_id => item.id, :checkin_dt => nil).count
+      if records >= 3
         raise 'Max References Reached'
       end
 
@@ -151,6 +117,7 @@ class User < ApplicationRecord
     self.phone.gsub!(' ', '')
     self.first_name.gsub!(' ', '')
     self.last_name.gsub!(' ', '')
+    self.full_name = "#{self.first_name} #{self.last_name}".downcase
   end
 
   def init_user

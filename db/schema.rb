@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170727025002) do
+ActiveRecord::Schema.define(version: 20170801002507) do
 
   create_table "addresses", force: :cascade do |t|
     t.string "street", null: false
@@ -124,7 +124,7 @@ ActiveRecord::Schema.define(version: 20170727025002) do
 
   create_table "log_entries", force: :cascade do |t|
     t.integer "user_id", precision: 38, null: false
-    t.integer "holding_section_id", precision: 38, null: false
+    t.integer "holding_id", precision: 38, null: false
     t.integer "item_id", precision: 38, null: false
     t.datetime "checkout_dt", precision: 6, null: false
     t.datetime "checkin_dt", precision: 6
@@ -183,7 +183,7 @@ ActiveRecord::Schema.define(version: 20170727025002) do
     t.string "title", null: false
     t.string "subtitle", null: false
     t.integer "publisher_id", precision: 38
-    t.string "holding_id", null: false
+    t.integer "holding_id", precision: 38, null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["holding_id"], name: "index_references_on_holding_id"
@@ -229,6 +229,7 @@ ActiveRecord::Schema.define(version: 20170727025002) do
     t.boolean "active", default: true, null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "full_name"
     t.index ["email"], name: "index_users_on_email"
     t.index ["first_name"], name: "index_users_on_first_name"
     t.index ["last_name"], name: "index_users_on_last_name"

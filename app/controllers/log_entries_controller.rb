@@ -17,7 +17,6 @@ class LogEntriesController < ApplicationController
   # POST /log_entries
   def create
     @log_entry = LogEntry.new(log_entry_params)
-
     if @log_entry.save
       render json: @log_entry, status: :created, location: @log_entry
     else

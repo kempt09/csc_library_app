@@ -4,7 +4,7 @@ class CreateReferences < ActiveRecord::Migration[5.1]
       t.string :title, null: false
       t.string :subtitle, null: false
       t.integer :publisher_id, null: true, index: true
-      t.string :holding_id, null: false, index: true
+      t.integer :holding_id, null: false, index: true
       t.timestamps
     end
   end

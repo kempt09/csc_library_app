@@ -15,7 +15,7 @@ class Holding < ApplicationRecord
   validates :section, presence: true, :inclusion => { :in => ['CIR', 'REF', 'PER'] }
 
   def find_item(id)
-    case self.sections
+    case self.section
       when 'REF'
         Reference.find(id)
       when 'PER'

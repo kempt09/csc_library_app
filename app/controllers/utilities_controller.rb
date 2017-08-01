@@ -33,7 +33,7 @@ class UtilitiesController < ApplicationController
   def checkout
     begin
       user = User.find(params[:user_id])
-      holding = Holding.find(params[:holding_id])
+      holding = Holding.where(:section => params[:section]).first
       item = holding.find_item(params[:item_id])
       if item.available?
         log_entry = user.create_checkout(item)
@@ -42,7 +42,7 @@ class UtilitiesController < ApplicationController
         raise 'Item Unavailable'
       end
     rescue StandardError => e
-      render json: { errors: {message: e}}, status: :unprocessable_entity
+      render json: { errors: [{message: e}]}, status: :unprocessable_entity
     end
   end
 
