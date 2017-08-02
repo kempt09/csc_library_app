@@ -25,19 +25,21 @@ class SearchController < ApplicationController
         books = Circulation.includes(:authors).where('LOWER(title) LIKE ?', "%#{title.downcase}%")
     end
     books.each do |book|
-      schema = {
-        id: book[:id],
-        title: book[:title],
-        subtitle: book[:subtitle],
-        volume: book[:volume],
-        volume_no: book[:volume_no],
-        publisher: book.publisher != nil ? book.publisher[:name] : '',
-        authors: []
-      }
-      book.authors.each do |author|
-        schema[:authors] << "#{author[:first_name]} #{author[:last_name]}"
+      if book.available?
+        schema = {
+          id: book[:id],
+          title: book[:title],
+          subtitle: book[:subtitle],
+          volume: book[:volume],
+          volume_no: book[:volume_no],
+          publisher: book.publisher != nil ? book.publisher[:name] : '',
+          authors: []
+        }
+        book.authors.each do |author|
+          schema[:authors] << "#{author[:first_name]} #{author[:last_name]}"
+        end
+        records << schema
       end
-      records << schema
     end
     render json: records
   end
@@ -47,8 +49,20 @@ class SearchController < ApplicationController
       :id => params[:user_id],
       :user_type => ['STU', 'COM']
     ).first
-
+    logs = user.log_entries.where(:checkin_dt => nil)
     collection = []
+    logs.each do |log|
+      item = log.holding.find_item(log.item_id)
+      collection << {
+        id: log.id,
+        user_id: log.user_id,
+        item_id: item.id,
+        holding_id: item.holding_id,
+        title: item.title,
+        checkout_dt: log.checkout_dt,
+        due_dt: log.due_dt
+      }
+    end
     render json: collection
   end
 

@@ -48,6 +48,7 @@ class UtilitiesController < ApplicationController
 
   def checkin
     begin
+      user = User.find(params[:user_id])
       holding = Holding.find(params[:holding_id])
       item = holding.find_item(params[:item_id])
       if user.create_checkin(item)

@@ -56,8 +56,8 @@ class User < ApplicationRecord
   end
 
   def overdue_books?
-    start_dt = Time.now
-    end_dt = Time.now + 20.years
+    start_dt = Time.now - 1.years
+    end_dt = Time.now
     records = LogEntry.where(:user_id => self.id, :checkin_dt => nil, :due_dt => start_dt..end_dt).count
     if records > 0
       true
