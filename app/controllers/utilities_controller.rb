@@ -9,7 +9,7 @@ class UtilitiesController < ApplicationController
     begin
       user = User.where(email: email).first
       if user != nil
-        if user.staff?
+        if user.user_type == 'STA'
           if Password.new(user[:hashed_password]) == password && user[:active]
             if user.update_token
               render json: {
