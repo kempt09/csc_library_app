@@ -114,6 +114,7 @@ class User < ApplicationRecord
 
   def format_attrs_on_save
     self.email.gsub!(' ', '')
+    self.email.downcase!
     self.phone.gsub!(' ', '')
     self.first_name.gsub!(' ', '')
     self.last_name.gsub!(' ', '')

@@ -30,7 +30,21 @@ class PeriodicalsController < ApplicationController
 
   # PATCH/PUT /periodicals/1
   def update
+    authors = params[:data][:relationships][:authors][:data]
     if @periodical.update(periodical_params)
+      old_authors = @periodical.authors
+
+      old_authors.each do |author|
+        record = AuthorPeriodical.where(:periodical_id => @periodical.id, :author_id => author[:id]).first
+        if record != nil
+          record.destroy
+        end
+      end
+
+      authors.each do |author|
+        AuthorPeriodical.create(:periodical_id => @periodical.id, :author_id => author[:id])
+      end
+
       render json: @periodical
     else
       render json: @periodical.errors, status: :unprocessable_entity

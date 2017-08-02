@@ -124,6 +124,7 @@ ActiveRecord::Schema.define(version: 20170802012245) do
     t.string "section", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.boolean "active", default: true
   end
 
   create_table "log_entries", force: :cascade do |t|

@@ -29,7 +29,22 @@ class CirculationsController < ApplicationController
 
   # PATCH/PUT /circulations/1
   def update
+    authors = params[:data][:relationships][:authors][:data]
     if @circulation.update(circulation_params)
+
+      old_authors = @circulation.authors
+
+      old_authors.each do |author|
+        record = AuthorCirculation.where(:circulation_id => @circulation.id, :author_id => author[:id]).first
+        if record != nil
+          record.destroy
+        end
+      end
+
+      authors.each do |author|
+        AuthorCirculation.create(:circulation_id => @circulation.id, :author_id => author[:id])
+      end
+
       render json: @circulation
     else
       render json: @circulation.errors, status: :unprocessable_entity

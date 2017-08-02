@@ -7,7 +7,7 @@ class UtilitiesController < ApplicationController
     email = params[:email]
     password = params[:password]
     begin
-      user = User.where(email: email).first
+      user = User.where(email: email.downcase).first
       if user != nil
         if user.user_type == 'STA'
           if Password.new(user[:hashed_password]) == password && user[:active]

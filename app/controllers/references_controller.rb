@@ -29,7 +29,22 @@ class ReferencesController < ApplicationController
 
   # PATCH/PUT /references/1
   def update
+    authors = params[:data][:relationships][:authors][:data]
     if @reference.update(reference_params)
+
+      old_authors = @reference.authors
+
+      old_authors.each do |author|
+        record = AuthorReference.where(:reference_id => @reference.id, :author_id => author[:id]).first
+        if record != nil
+          record.destroy
+        end
+      end
+
+      authors.each do |author|
+        AuthorReference.create(:reference_id => @reference.id, :author_id => author[:id])
+      end
+
       render json: @reference
     else
       render json: @reference.errors, status: :unprocessable_entity
