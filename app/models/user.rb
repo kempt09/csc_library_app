@@ -123,6 +123,7 @@ class User < ApplicationRecord
   def init_user
     self.token = SecureRandom.uuid
     self.hashed_password = SecureRandom.uuid
+    self.active = true
   end
 
   def clean_up
