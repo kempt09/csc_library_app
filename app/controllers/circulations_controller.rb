@@ -4,7 +4,7 @@ class CirculationsController < ApplicationController
 
   # GET /circulations
   def index
-    @circulations = Circulation.all.paginate(page: page, per_page: per_page)
+    @circulations = Circulation.where(:active => true).paginate(page: page, per_page: per_page)
     render json: @circulations
   end
 
@@ -38,17 +38,17 @@ class CirculationsController < ApplicationController
 
   # DELETE /circulations/1
   def destroy
-    @circulation.destroy
+    @circulation.update(:active => false)
   end
 
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_circulation
-      @circulation = Circulation.includes(:authors, :publisher, :holding).find(params[:id])
+      @circulation = Circulation.includes(:authors, :publisher, :holding).where(:id => params[:id], :active => true).first
     end
 
     # Only allow a trusted parameter "white list" through.
     def circulation_params
-      params.require(:data).permit({attributes: [:title, :subtitle, :cost, :publisher_id, :holding_id]})
+      params.require(:data).permit({attributes: [:title, :subtitle, :cost, :publisher_id, :holding_id, :active]})
     end
 end

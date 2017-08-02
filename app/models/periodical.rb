@@ -29,12 +29,12 @@ class Periodical < ApplicationRecord
     end
 
     def add_holding
-      self.holding = Holding.where(id: self.holding_id).first
+      self.holding = Holding.where(id: self.holding_id, :active => true).first
     end
 
     def add_publisher
       if self.publisher_id != nil
-        self.publisher = Publisher.where(id: self.publisher_id).first
+        self.publisher = Publisher.where(id: self.publisher_id, :active => true).first
       else
         self.publisher = nil
       end

@@ -4,7 +4,7 @@ class StaffsController < ApplicationController
 
   # GET /staffs
   def index
-    @staffs = Staff.all.paginate(page: page, per_page: per_page)
+    @staffs = Staff.where(:active => true).paginate(page: page, per_page: per_page)
     render json: @staffs, include: ['user']
   end
 
@@ -34,17 +34,17 @@ class StaffsController < ApplicationController
 
   # DELETE /staffs/1
   def destroy
-    @staff.destroy
+    @staff.update(:active => false)
   end
 
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_staff
-      @staff = Staff.find(params[:id])
+      @staff = Staff.where(:id => params[:id], :active => true).first
     end
 
     # Only allow a trusted parameter "white list" through.
     def staff_params
-      params.require(:data).permit({attributes: [:rank, :role, :user_id]})
+      params.require(:data).permit({attributes: [:rank, :role, :user_id, :active]})
     end
 end

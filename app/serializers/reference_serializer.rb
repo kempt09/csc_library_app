@@ -3,5 +3,5 @@ class ReferenceSerializer < ApplicationSerializer
   has_one :publisher
   has_one :holding
 
-  attributes :id, :title, :subtitle, :publisher_id, :holding_id, :created_at, :updated_at
+  attributes :id, :title, :subtitle, :publisher_id, :holding_id, :created_at, :updated_at, :active
 end

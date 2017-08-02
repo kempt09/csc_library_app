@@ -4,7 +4,7 @@ class ReferencesController < ApplicationController
 
   # GET /references
   def index
-    @references = Reference.all.paginate(page: page, per_page: per_page)
+    @references = Reference.where(:active => true).paginate(page: page, per_page: per_page)
     render json: @references
   end
 
@@ -38,17 +38,17 @@ class ReferencesController < ApplicationController
 
   # DELETE /references/1
   def destroy
-    @reference.destroy
+    @reference.update(:active => false)
   end
 
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_reference
-      @reference = Reference.includes(:authors, :publisher, :holding).find(params[:id])
+      @reference = Reference.includes(:authors, :publisher, :holding).where(:id => params[:id], :active => true).first
     end
 
     # Only allow a trusted parameter "white list" through.
     def reference_params
-      params.require(:data).permit({attributes: [:title, :subtitle, :publisher_id, :holding_id]})
+      params.require(:data).permit({attributes: [:title, :subtitle, :publisher_id, :holding_id, :active]})
     end
 end

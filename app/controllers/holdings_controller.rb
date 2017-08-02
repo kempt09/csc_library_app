@@ -4,7 +4,7 @@ class HoldingsController < ApplicationController
 
   # GET /holdings
   def index
-    @holdings = Holding.all.paginate(page: page, per_page: per_page)
+    @holdings = Holding.where(:active => true).paginate(page: page, per_page: per_page)
     render json: @holdings
   end
 
@@ -45,7 +45,7 @@ class HoldingsController < ApplicationController
 
   # DELETE /holdings/1
   def destroy
-    @holding.destroy
+    @holding.update(:active => false)
   end
 
   private
@@ -55,11 +55,11 @@ class HoldingsController < ApplicationController
         {circulations: [:authors, :publisher]},
         {references: [:authors, :publisher]},
         {periodicals: [:authors, :publisher]}
-      ).find(params[:id])
+      ).where(:id => params[:id], :active => true).first
     end
 
     # Only allow a trusted parameter "white list" through.
     def holding_params
-      params.require(:data).permit({attributes: [:title, :section]})
+      params.require(:data).permit({attributes: [:title, :section, :active]})
     end
 end

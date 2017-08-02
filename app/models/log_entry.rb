@@ -20,8 +20,8 @@ class LogEntry < ApplicationRecord
   private
 
     def add_relationships
-      self.user = User.where(id: self.user_id).first
-      self.holding = Holding.where(id: self.holding_id).first
+      self.user = User.where(id: self.user_id, :active => true).first
+      self.holding = Holding.where(id: self.holding_id, :active => true).first
     end
 
 end

@@ -6,7 +6,7 @@ class UsersController < ApplicationController
   # GET /users
   def index
     hash = {}
-
+    hash[:active] = true
     if params[:user_type] != nil && params[:user_type] != ''
       hash['user_type'] = params[:user_type]
     end
@@ -57,16 +57,16 @@ class UsersController < ApplicationController
 
   # DELETE /users/1
   def destroy
-    @user.destroy
+    @user.update(:active => false)
   end
 
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_user
       if @current_user.staff?
-        @user = User.find(params[:id])
+        @user = User.where(:id => params[:id], :active => true).first
       else
-        @user = User.where(id: @current_user.id).first
+        @user = User.where(:id => @current_user.id, :active => true).first
       end
     end
 

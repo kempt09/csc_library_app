@@ -4,7 +4,7 @@ class CommunityUsersController < ApplicationController
 
   # GET /community_users
   def index
-    @community_users = CommunityUser.all.paginate(page: page, per_page: per_page)
+    @community_users = CommunityUser.where(:active => true).paginate(page: page, per_page: per_page)
 
     render json: @community_users, include: ['user']
   end
@@ -36,17 +36,17 @@ class CommunityUsersController < ApplicationController
 
   # DELETE /community_users/1
   def destroy
-    @community_user.destroy
+    @community_user.update(:active => false)
   end
 
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_community_user
-      @community_user = CommunityUser.find(params[:id])
+      @community_user = CommunityUser.where(:id => params[:id], :active => true).first
     end
 
     # Only allow a trusted parameter "white list" through.
     def community_user_params
-      params.require(:data).permit({attributes: [:expiration_dt, :user_id]})
+      params.require(:data).permit({attributes: [:expiration_dt, :user_id, :active]})
     end
 end

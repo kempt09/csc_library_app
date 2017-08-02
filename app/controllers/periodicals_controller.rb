@@ -4,7 +4,7 @@ class PeriodicalsController < ApplicationController
 
   # GET /periodicals
   def index
-    @periodicals = Periodical.all.paginate(page: page, per_page: per_page)
+    @periodicals = Periodical.where(:active => true).paginate(page: page, per_page: per_page)
     render json: @periodicals
   end
 
@@ -39,17 +39,17 @@ class PeriodicalsController < ApplicationController
 
   # DELETE /periodicals/1
   def destroy
-    @periodical.destroy
+    @periodical.update(:active => false)
   end
 
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_periodical
-      @periodical = Periodical.includes(:authors, :publisher, :holding).find(params[:id])
+      @periodical = Periodical.includes(:authors, :publisher, :holding).where(:id => params[:id], :active => true).first
     end
 
     # Only allow a trusted parameter "white list" through.
     def periodical_params
-      params.require(:data).permit({attributes: [:title, :volume, :volume_no, :holding_id, :publisher_id]})
+      params.require(:data).permit({attributes: [:title, :volume, :volume_no, :holding_id, :publisher_id, :active]})
     end
 end

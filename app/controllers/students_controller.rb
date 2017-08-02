@@ -4,7 +4,7 @@ class StudentsController < ApplicationController
 
   # GET /students
   def index
-    @students = Student.all.paginate(page: page, per_page: per_page)
+    @students = Student.where(:active => true).paginate(page: page, per_page: per_page)
 
     render json: @students, include: ['user']
   end
@@ -36,17 +36,17 @@ class StudentsController < ApplicationController
 
   # DELETE /students/1
   def destroy
-    @student.destroy
+    @student.update(:active => false)
   end
 
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_student
-      @student = Student.find(params[:id])
+      @student = Student.where(:id => params[:id], :active => true).first
     end
 
     # Only allow a trusted parameter "white list" through.
     def student_params
-      params.require(:data).permit({attributes: [:student_class, :major, :minor, :user_id]})
+      params.require(:data).permit({attributes: [:student_class, :major, :minor, :user_id, :active]})
     end
 end

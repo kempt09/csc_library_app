@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170801002507) do
+ActiveRecord::Schema.define(version: 20170802012245) do
 
   create_table "addresses", force: :cascade do |t|
     t.string "street", null: false
@@ -22,6 +22,7 @@ ActiveRecord::Schema.define(version: 20170801002507) do
     t.integer "user_id", limit: 19, precision: 19
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.boolean "active", default: true
     t.index ["user_id"], name: "index_addresses_on_user_id"
   end
 
@@ -57,6 +58,7 @@ ActiveRecord::Schema.define(version: 20170801002507) do
     t.string "last_name"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.boolean "active", default: true
   end
 
   create_table "circulations", force: :cascade do |t|
@@ -67,6 +69,7 @@ ActiveRecord::Schema.define(version: 20170801002507) do
     t.integer "publisher_id", precision: 38
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.boolean "active", default: true
     t.index ["holding_id"], name: "i_circulations_holding_id"
     t.index ["publisher_id"], name: "i_circulations_publisher_id"
   end
@@ -76,6 +79,7 @@ ActiveRecord::Schema.define(version: 20170801002507) do
     t.integer "user_id", limit: 19, precision: 19
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.boolean "active", default: true
     t.index ["user_id"], name: "i_community_users_user_id"
   end
 
@@ -131,6 +135,7 @@ ActiveRecord::Schema.define(version: 20170801002507) do
     t.datetime "due_dt", precision: 6, null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.boolean "active", default: true
   end
 
   create_table "periodicals", force: :cascade do |t|
@@ -141,6 +146,7 @@ ActiveRecord::Schema.define(version: 20170801002507) do
     t.integer "publisher_id", precision: 38
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.boolean "active", default: true
     t.index ["holding_id"], name: "i_periodicals_holding_id"
     t.index ["publisher_id"], name: "i_periodicals_publisher_id"
   end
@@ -176,6 +182,7 @@ ActiveRecord::Schema.define(version: 20170801002507) do
     t.string "name", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.boolean "active", default: true
     t.index ["name"], name: "index_publishers_on_name"
   end
 
@@ -186,6 +193,7 @@ ActiveRecord::Schema.define(version: 20170801002507) do
     t.integer "holding_id", precision: 38, null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.boolean "active", default: true
     t.index ["holding_id"], name: "index_references_on_holding_id"
     t.index ["publisher_id"], name: "i_references_publisher_id"
   end
@@ -196,6 +204,7 @@ ActiveRecord::Schema.define(version: 20170801002507) do
     t.integer "user_id", limit: 19, precision: 19
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.boolean "active", default: true
     t.index ["user_id"], name: "index_staffs_on_user_id"
   end
 
@@ -206,6 +215,7 @@ ActiveRecord::Schema.define(version: 20170801002507) do
     t.integer "user_id", limit: 19, precision: 19
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.boolean "active", default: true
     t.index ["user_id"], name: "index_students_on_user_id"
   end
 

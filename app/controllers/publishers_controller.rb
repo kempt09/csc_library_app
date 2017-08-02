@@ -5,9 +5,9 @@ class PublishersController < ApplicationController
   # GET /publishers
   def index
     if params[:include_all] === 'true'
-      @publishers = Publisher.all
+      @publishers = Publisher.where(:active => true)
     else
-      @publishers = Publisher.all.paginate(page: page, per_page: per_page)
+      @publishers = Publisher.where(:active => true).paginate(page: page, per_page: per_page)
     end
     render json: @publishers
   end
@@ -39,17 +39,17 @@ class PublishersController < ApplicationController
 
   # DELETE /publishers/1
   def destroy
-    @publisher.destroy
+    @publisher.update(:active => false)
   end
 
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_publisher
-      @publisher = Publisher.includes(:references, :periodicals, :circulations).find(params[:id])
+      @publisher = Publisher.includes(:references, :periodicals, :circulations).where(:id => params[:id], :active => true).first
     end
 
     # Only allow a trusted parameter "white list" through.
     def publisher_params
-      params.require(:data).permit({attributes: [:name]})
+      params.require(:data).permit({attributes: [:name, :active]})
     end
 end

@@ -6,7 +6,7 @@ class SearchController < ApplicationController
     email = params[:email] != nil && params[:email] != '' ? params[:email] : ''
     phone = params[:phone] != nil && params[:phone] != '' ? params[:phone] : ''
 
-    @users = User.where('full_name LIKE ? AND email LIKE ? AND phone LIKE ? AND user_type != ?', "%#{name.downcase}%", "%#{email.downcase}%", "%#{phone}%", 'STA')
+    @users = User.where('full_name LIKE ? AND email LIKE ? AND phone LIKE ? AND user_type != ? AND active = ?', "%#{name.downcase}%", "%#{email.downcase}%", "%#{phone}%", 'STA', true)
     render json: @users, status: :ok
   end
 
@@ -18,11 +18,11 @@ class SearchController < ApplicationController
 
     case section
       when 'REF'
-        books = Reference.includes(:authors).where('LOWER(title) LIKE ?', "%#{title.downcase}%")
+        books = Reference.includes(:authors).where('LOWER(title) LIKE ? AND active = ?', "%#{title.downcase}%", true)
       when 'PER'
-        books = Periodical.includes(:authors).where('LOWER(title) LIKE ?', "%#{title.downcase}%")
+        books = Periodical.includes(:authors).where('LOWER(title) LIKE ? AND active = ?', "%#{title.downcase}%", true)
       when 'CIR'
-        books = Circulation.includes(:authors).where('LOWER(title) LIKE ?', "%#{title.downcase}%")
+        books = Circulation.includes(:authors).where('LOWER(title) LIKE ? AND active = ?', "%#{title.downcase}%", true)
     end
     books.each do |book|
       if book.available?
@@ -47,9 +47,10 @@ class SearchController < ApplicationController
   def search_inventory
     user = User.includes({log_entries: [:holding]}).where(
       :id => params[:user_id],
-      :user_type => ['STU', 'COM']
+      :user_type => ['STU', 'COM'],
+      :active => true
     ).first
-    logs = user.log_entries.where(:checkin_dt => nil)
+    logs = user.log_entries.where(:checkin_dt => nil, :active => true)
     collection = []
     logs.each do |log|
       item = log.holding.find_item(log.item_id)

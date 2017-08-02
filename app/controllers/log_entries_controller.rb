@@ -5,7 +5,7 @@ class LogEntriesController < ApplicationController
 
   # GET /log_entries
   def index
-    @log_entries = LogEntry.all.includes(:user, :holding).paginate(page: page, per_page: per_page)
+    @log_entries = LogEntry.where(:active => true).includes(:user, :holding).paginate(page: page, per_page: per_page)
     render json: @log_entries, include: ['user', 'holding']
   end
 
@@ -35,17 +35,17 @@ class LogEntriesController < ApplicationController
 
   # DELETE /log_entries/1
   def destroy
-    @log_entry.destroy
+    @log_entry.update(:active => false)
   end
 
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_log_entry
-      @log_entry = LogEntry.includes(:user, :holding).find(params[:id])
+      @log_entry = LogEntry.includes(:user, :holding).where(:id => params[:id], :active => true).first
     end
 
     # Only allow a trusted parameter "white list" through.
     def log_entry_params
-      params.require(:data).permit({attributes: [:user_id, :holding_id, :item_id, :checkout_dt, :checkin_dt, :due_dt]})
+      params.require(:data).permit({attributes: [:user_id, :holding_id, :item_id, :checkout_dt, :checkin_dt, :due_dt, :active]})
     end
 end

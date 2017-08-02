@@ -8,22 +8,28 @@ class UtilitiesController < ApplicationController
     password = params[:password]
     begin
       user = User.where(email: email).first
-      if Password.new(user[:hashed_password]) == password && user[:active]
-        if user.update_token
-          render json: {
-            data: {
-              user: user,
-              address: user.address,
-              isStaff: user.staff?,
-              isStudent: user.student?,
-              isCommunityUser: user.community_user?
-            }
-          }
+      if user != nil
+        if user.staff?
+          if Password.new(user[:hashed_password]) == password && user[:active]
+            if user.update_token
+              render json: {
+                data: {
+                  user: user,
+                  address: user.address,
+                  isStaff: user.staff?,
+                  isStudent: user.student?,
+                  isCommunityUser: user.community_user?
+                }
+              }
+            else
+              raise 'Error Signing In'
+            end
+          else
+            render json: { errors: [{message: 'Unauthorized'}]}, status: :unauthorized
+          end
         else
-          raise 'Error Signing In'
+          render json: { errors: [{message: 'Customer Support Comming Shortly'}]}, status: :unauthorized
         end
-      else
-        render json: { errors: [{message: 'Unauthorized'}]}, status: :unauthorized
       end
     rescue StandardError => e
       render json: { errors: [{message: 'Unauthorized'}]}, status: :unauthorized
@@ -32,7 +38,7 @@ class UtilitiesController < ApplicationController
 
   def checkout
     begin
-      user = User.find(params[:user_id])
+      user = User.where(params[:user_id])
       holding = Holding.where(:section => params[:section]).first
       item = holding.find_item(params[:item_id])
       if item.available?
@@ -63,7 +69,7 @@ class UtilitiesController < ApplicationController
 
   def inventory
     begin
-      items = LogEntry.includes(:holding, :user).where(checkin_dt: nil).order(checkin_dt: :desc)
+      items = LogEntry.includes(:holding, :user).where(checkin_dt: nil, :active => true).order(checkin_dt: :desc)
       collection = []
       items.each do |item|
         collection << {
@@ -82,7 +88,7 @@ class UtilitiesController < ApplicationController
   def customer_history
     begin
       items = LogEntry.includes(:holding)
-                .where(:user_id => @current_user.id)
+                .where(:user_id => @current_user.id, :active => true)
                 .paginate(page: page, per_page: per_page)
                 .order(id: :desc)
       collection = []

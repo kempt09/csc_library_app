@@ -9,7 +9,7 @@ class Student < ApplicationRecord
   private
 
   def update_user
-    user = User.where(id: self.user_id).first
+    user = User.where(id: self.user_id, :active => true).first
     user.update(:user_type => 'STU')
   end
 

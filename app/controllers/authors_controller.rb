@@ -8,6 +8,7 @@ class AuthorsController < ApplicationController
       @authors = Author.all
     else
       hash =  {}
+      hash[:active] = true
       if params[:first_name] != nil && params[:first_name] != ''
         hash[:first_name] = params[:first_name]
       end
@@ -47,17 +48,17 @@ class AuthorsController < ApplicationController
 
   # DELETE /authors/1
   def destroy
-    @author.destroy
+    @author.update(:active => false)
   end
 
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_author
-      @author = Author.includes(:references, :circulations, :periodicals).find(params[:id])
+      @author = Author.includes(:references, :circulations, :periodicals).where(:id => params[:id], :active => true).first
     end
 
     # Only allow a trusted parameter "white list" through.
     def author_params
-      params.require(:data).permit({attributes: [:first_name, :last_name]})
+      params.require(:data).permit({attributes: [:first_name, :last_name, :active]})
     end
 end

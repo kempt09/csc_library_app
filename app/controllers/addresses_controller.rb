@@ -5,7 +5,7 @@ class AddressesController < ApplicationController
 
   # GET /addresses
   def index
-    @addresses = Address.all.paginate(page: page, per_page: per_page)
+    @addresses = Address.where(:active => true).paginate(page: page, per_page: per_page)
     render json: @addresses, include: ['user']
   end
 
@@ -17,7 +17,6 @@ class AddressesController < ApplicationController
   # POST /addresses
   def create
     @address = Address.new(address_params)
-
     if @address.save
       render json: @address, status: :created, location: @address
     else
@@ -36,22 +35,22 @@ class AddressesController < ApplicationController
 
   # DELETE /addresses/1
   def destroy
-    @address.destroy
+    @address.update(:active => false)
   end
 
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_address
       if @current_user.staff?
-        @address = Address.find(params[:id])
+        @address = Address.where(:id => params[:id], :active => true).first
       else
-        @address = Address.where(id: params[:id], :user_id => @current_user.id).first
+        @address = Address.where(:id => params[:id], :user_id => @current_user.id, :active => true).first
       end
 
     end
 
     # Only allow a trusted parameter "white list" through.
     def address_params
-      params.require(:data).permit({attributes: [:street, :apt, :city, :state, :country, :zip, :user_id]})
+      params.require(:data).permit({attributes: [:street, :apt, :city, :state, :country, :zip, :user_id, :active]})
     end
 end
