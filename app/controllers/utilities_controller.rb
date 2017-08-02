@@ -38,7 +38,7 @@ class UtilitiesController < ApplicationController
 
   def checkout
     begin
-      user = User.where(params[:user_id])
+      user = User.find(params[:user_id])
       holding = Holding.where(:section => params[:section]).first
       item = holding.find_item(params[:item_id])
       if item.available?

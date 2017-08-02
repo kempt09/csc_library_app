@@ -2,16 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="43eec3c7-2cc1-4665-8037-c6f807924799" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/controllers/circulations_controller.rb" afterPath="$PROJECT_DIR$/app/controllers/circulations_controller.rb" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/controllers/periodicals_controller.rb" afterPath="$PROJECT_DIR$/app/controllers/periodicals_controller.rb" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/controllers/references_controller.rb" afterPath="$PROJECT_DIR$/app/controllers/references_controller.rb" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/controllers/utilities_controller.rb" afterPath="$PROJECT_DIR$/app/controllers/utilities_controller.rb" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/models/staff.rb" afterPath="$PROJECT_DIR$/app/models/staff.rb" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/models/user.rb" afterPath="$PROJECT_DIR$/app/models/user.rb" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/services/seed_service.rb" afterPath="$PROJECT_DIR$/app/services/seed_service.rb" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/views/user_mailer/send_password.html.erb" afterPath="$PROJECT_DIR$/app/views/user_mailer/send_password.html.erb" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/views/user_mailer/send_password.text.erb" afterPath="$PROJECT_DIR$/app/views/user_mailer/send_password.text.erb" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/db/schema.rb" afterPath="$PROJECT_DIR$/db/schema.rb" />
     </list>
     <ignored path="$PROJECT_DIR$/.bundle/" />
     <ignored path="$PROJECT_DIR$/components/" />
@@ -26,16 +18,26 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="CoverageDataManager">
-    <SUITE FILE_PATH="coverage/csc_library_app@Development__csc_library_app.coverage" NAME="Development: csc_library_app Coverage Results" MODIFIED="1501641866653" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="rcov" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" MODULE_NAME="csc_library_app" />
+    <SUITE FILE_PATH="coverage/csc_library_app@Development__csc_library_app.coverage" NAME="Development: csc_library_app Coverage Results" MODIFIED="1501643189367" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="rcov" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" MODULE_NAME="csc_library_app" />
   </component>
   <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file leaf-file-name="utilities_controller.rb" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/app/controllers/utilities_controller.rb">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="210">
+              <caret line="45" column="46" lean-forward="true" selection-start-line="45" selection-start-column="46" selection-end-line="45" selection-end-column="46" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file leaf-file-name="circulations_controller.rb" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/controllers/circulations_controller.rb">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="407">
-              <caret line="44" column="95" lean-forward="false" selection-start-line="44" selection-start-column="95" selection-end-line="44" selection-end-column="95" />
+            <state relative-caret-position="107">
+              <caret line="24" column="8" lean-forward="true" selection-start-line="24" selection-start-column="8" selection-end-line="24" selection-end-column="8" />
               <folding />
             </state>
           </provider>
@@ -51,11 +53,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="periodicals_controller.rb" pinned="false" current-in-tab="true">
+      <file leaf-file-name="periodicals_controller.rb" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/controllers/periodicals_controller.rb">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="245">
-              <caret line="39" column="24" lean-forward="true" selection-start-line="39" selection-start-column="24" selection-end-line="39" selection-end-column="24" />
+            <state relative-caret-position="56">
+              <caret line="14" column="0" lean-forward="true" selection-start-line="14" selection-start-column="0" selection-end-line="14" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -124,13 +126,13 @@
         <option value="$PROJECT_DIR$/db/migrate/20170802012245_add_active_to_items.rb" />
         <option value="$PROJECT_DIR$/app/models/staff.rb" />
         <option value="$PROJECT_DIR$/app/models/user.rb" />
-        <option value="$PROJECT_DIR$/app/controllers/utilities_controller.rb" />
         <option value="$PROJECT_DIR$/app/views/user_mailer/send_password.html.erb" />
         <option value="$PROJECT_DIR$/app/views/user_mailer/send_password.text.erb" />
         <option value="$PROJECT_DIR$/app/services/seed_service.rb" />
         <option value="$PROJECT_DIR$/app/controllers/circulations_controller.rb" />
         <option value="$PROJECT_DIR$/app/controllers/references_controller.rb" />
         <option value="$PROJECT_DIR$/app/controllers/periodicals_controller.rb" />
+        <option value="$PROJECT_DIR$/app/controllers/utilities_controller.rb" />
       </list>
     </option>
   </component>
@@ -565,12 +567,12 @@
       <workItem from="1501524914911" duration="4189000" />
       <workItem from="1501546456659" duration="7352000" />
       <workItem from="1501555701615" duration="2258000" />
-      <workItem from="1501631915482" duration="7312000" />
+      <workItem from="1501631915482" duration="7836000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="75523000" />
+    <option name="totallyTimeSpent" value="76047000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1440" height="900" extended-state="6" />
@@ -885,14 +887,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/controllers/utilities_controller.rb">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="105">
-          <caret line="7" column="32" lean-forward="true" selection-start-line="7" selection-start-column="32" selection-end-line="7" selection-end-column="32" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/controllers/search_controller.rb">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1065">
@@ -1013,14 +1007,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/controllers/circulations_controller.rb">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="407">
-          <caret line="44" column="95" lean-forward="false" selection-start-line="44" selection-start-column="95" selection-end-line="44" selection-end-column="95" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/controllers/references_controller.rb">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="409">
@@ -1031,8 +1017,24 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/controllers/periodicals_controller.rb">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="245">
-          <caret line="39" column="24" lean-forward="true" selection-start-line="39" selection-start-column="24" selection-end-line="39" selection-end-column="24" />
+        <state relative-caret-position="56">
+          <caret line="14" column="0" lean-forward="true" selection-start-line="14" selection-start-column="0" selection-end-line="14" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/controllers/circulations_controller.rb">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="107">
+          <caret line="24" column="8" lean-forward="true" selection-start-line="24" selection-start-column="8" selection-end-line="24" selection-end-column="8" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/controllers/utilities_controller.rb">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="210">
+          <caret line="45" column="46" lean-forward="true" selection-start-line="45" selection-start-column="46" selection-end-line="45" selection-end-column="46" />
           <folding />
         </state>
       </provider>
