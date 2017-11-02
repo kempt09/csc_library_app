@@ -1,22 +1,16 @@
 default: &default
-  adapter: oracle_enhanced
-  database: orcl12c
-  host: 192.168.99.12
-  port: 1521
-  username: system
-  password: oracle
-
-development:
-  <<: *default
-
-test:
-  <<: *default
-
-production:
   adapter: postgresql
   username:
   password:
   host: localhost
   port: 5432
+
+development:
+  <<: *default
+  database: csc_library
+
+production:
+  <<: *default
+  database: csc_library_production
 
 

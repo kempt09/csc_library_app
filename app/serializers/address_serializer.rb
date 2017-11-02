@@ -1,5 +1,5 @@
 class AddressSerializer < ApplicationSerializer
-  has_one :user
+  has_one :customer
 
-  attributes :id, :street, :apt, :city, :state, :country, :zip, :user_id, :created_at, :updated_at, :active
+  attributes :id, :street, :apt, :city, :state, :country, :zip, :customer_id, :created_at, :updated_at
 end

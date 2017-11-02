@@ -2,12 +2,14 @@ class Author < ApplicationRecord
   has_many :author_circulations
   has_many :circulations, through: :author_circulations
 
-  has_many :author_periodicals
-  has_many :periodicals, through: :author_periodicals
+  validates :first_name, :last_name, :name, :admin_id, presence: true
 
-  has_many :author_references
-  has_many :references, through: :author_references
+  before_save :compute_name
 
-  validates :first_name, :last_name, presence: true
+  private
+
+  def compute_name
+    self.name = "#{self.first_name} #{self.last_name}".downcase
+  end
 
 end

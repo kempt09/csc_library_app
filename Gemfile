@@ -14,15 +14,7 @@ gem 'bcrypt', '~> 3.1.7'
 gem 'jwt', '~> 1.5.4'
 gem 'will_paginate'
 gem 'rack-cors'
-
-group :development do
-  gem 'activerecord-oracle_enhanced-adapter'
-  gem 'ruby-oci8'
-end
-
-group :production do
-  gem 'pg'
-end
+gem 'pg'
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'listen'

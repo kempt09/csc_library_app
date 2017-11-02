@@ -1,27 +1,19 @@
 class LogEntry < ApplicationRecord
-  has_one :user_log_entry
-  has_one :user, through: :user_log_entry
+  has_one :customer_log_entry
+  has_one :customer, through: :customer_log_entry
 
-  has_one :holding_log_entry
-  has_one :holding, through: :holding_log_entry
+  has_one :circulation_log_entry
+  has_one :circulation, through: :circulation_log_entry
 
-  def holding_item
-    if self.holding.section == 'REF'
-      Reference.where(id: self.item_id).first
-    elsif self.holding.section == 'PER'
-      Periodical.where(id: self.item_id).first
-    else
-      Circulation.where(id: self.item_id).first
-    end
-  end
+  validates :customer_id, :circulation_id, :admin_id, presence: true
 
-  after_save :add_relationships
+  before_create :add_relationships
 
   private
 
     def add_relationships
-      self.user = User.where(id: self.user_id, :active => true).first
-      self.holding = Holding.where(id: self.holding_id, :active => true).first
+      self.customer = Customer.find_by(id: self.customer_id, :admin_id => self.admin_id)
+      self.circulation = Circulation.find_by(id: self.circulation_id, :admin_id => self.admin_id)
     end
 
 end

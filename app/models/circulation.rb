@@ -1,20 +1,20 @@
 class Circulation < ApplicationRecord
-  has_one :holding_circulation
-  has_one :holding, through: :holding_circulation
-
-  has_many :author_circulations
-  has_many :authors, through: :author_circulations, before_add: :validate_limit
+  include ActiveRecord::Dirty
+  has_one :author_circulation
+  has_one :author, through: :author_circulation
 
   has_one :publisher_circulation
   has_one :publisher, through: :publisher_circulation
 
-  validates :title, :cost, :holding_id, presence: true
+  has_many :circulation_log_entries
+  has_many :log_entries, through: :circulation_log_entries
 
-  after_create :add_holding
-  before_save :add_publisher
+  validates :title, :cost, :admin_id, presence: true
+
+  before_save :add_relationships
 
   def available?
-    records = LogEntry.where(:holding_id => self.holding_id, :item_id => self.id, :checkin_dt => nil).count
+    records = LogEntry.where(:circulation_id => self.id, :admin_id => self.admin_id, :checkin_dt => nil).count
     if records > 0
       false
     else
@@ -24,19 +24,12 @@ class Circulation < ApplicationRecord
 
   private
 
-    def validate_limit
-      raise Exception.new if self.authors.size >= 3
-    end
-
-    def add_holding
-      self.holding = Holding.where(id: self.holding_id, :active => true).first
-    end
-
-    def add_publisher
-      if self.publisher_id != nil
-        self.publisher = Publisher.where(id: self.publisher_id, :active => true).first
-      else
-        self.publisher = nil
+    def add_relationships
+      if self.author_id_changed?
+        self.author = Author.find_by(:admin_id => self.admin_id, id: self.author_id)
+      end
+      if self.publisher_id_changed?
+        self.publisher = Publisher.find_by(:admin_id => self.admin_id, id: self.publisher_id)
       end
     end
 

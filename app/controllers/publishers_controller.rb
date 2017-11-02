@@ -1,30 +1,27 @@
 class PublishersController < ApplicationController
-  before_action :validate_user, :is_staff?
+  before_action :validate_user
   before_action :set_publisher, only: [:show, :update, :destroy]
 
   # GET /publishers
   def index
-    if params[:include_all] === 'true'
-      @publishers = Publisher.where(:active => true)
-    else
-      @publishers = Publisher.where(:active => true).paginate(page: page, per_page: per_page)
-    end
+    @publishers = Publisher.where(:admin_id => @current_user.id).paginate(page: page, per_page: per_page)
     render json: @publishers
   end
 
   # GET /publishers/1
   def show
-    render json: @publisher, include: ['circulations', 'references', 'periodicals']
+    render json: @publisher, include: ['circulations']
   end
 
   # POST /publishers
   def create
     @publisher = Publisher.new(publisher_params)
+    @publisher.admin_id = @current_user.id
 
     if @publisher.save
       render json: @publisher, status: :created, location: @publisher
     else
-      render json: @publisher.errors, status: :unprocessable_entity
+      render json: {errors: @publisher.errors}, status: :unprocessable_entity
     end
   end
 
@@ -33,23 +30,23 @@ class PublishersController < ApplicationController
     if @publisher.update(publisher_params)
       render json: @publisher
     else
-      render json: @publisher.errors, status: :unprocessable_entity
+      render json: {errors: @publisher.errors}, status: :unprocessable_entity
     end
   end
 
   # DELETE /publishers/1
   def destroy
-    @publisher.update(:active => false)
+    @publisher.destroy
   end
 
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_publisher
-      @publisher = Publisher.includes(:references, :periodicals, :circulations).where(:id => params[:id], :active => true).first
+      @publisher = Publisher.includes(:circulations).where(:id => params[:id], :admin_id => @current_user.id).first
     end
 
     # Only allow a trusted parameter "white list" through.
     def publisher_params
-      params.require(:data).permit({attributes: [:name, :active]})
+      params.require(:data).permit({attributes: [:name]})
     end
 end

@@ -1,6 +1,6 @@
 class LogEntrySerializer < ApplicationSerializer
-  has_one :user
-  has_one :holding
+  has_one :customer
+  has_one :circulation
 
-  attributes :id, :user_id, :holding_id, :item_id, :checkout_dt, :checkin_dt, :due_dt, :created_at, :updated_at, :active
+  attributes :id, :customer_id, :circulation_id, :checkout_dt, :checkin_dt, :due_dt, :created_at, :updated_at
 end

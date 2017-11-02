@@ -1,39 +1,10 @@
 class UsersController < ApplicationController
-  before_action :validate_user
-  before_action :is_staff?, only: [:index, :create, :destroy]
+  before_action :validate_user, except: [:create]
   before_action :set_user, only: [:show, :update, :destroy]
-
-  # GET /users
-  def index
-    hash = {}
-    hash[:active] = true
-    if params[:user_type] != nil && params[:user_type] != ''
-      hash['user_type'] = params[:user_type]
-    end
-
-    if params[:email] != nil && params[:email] != ''
-      hash[:email] = params[:email]
-    end
-
-    if params[:first_name] != nil && params[:first_name] != ''
-      hash[:first_name] = params[:first_name]
-    end
-
-    if params[:last_name] != nil && params[:last_name] != ''
-      hash[:last_name] = params[:last_name]
-    end
-
-    if params[:phone] != nil && params[:phone] != ''
-      hash[:phone]  = params[:phone]
-    end
-
-    @users = User.where(hash).paginate(page: page, per_page: per_page).order({last_name: :asc, first_name: :asc})
-    render json: @users, include: ['staff', 'student', 'community_user']
-  end
 
   # GET /users/1
   def show
-    render json: @user, include: ['staff', 'student', 'community_user', 'address']
+    render json: @user
   end
 
   # POST /users
@@ -42,7 +13,7 @@ class UsersController < ApplicationController
     if @user.save
       render json: @user, status: :created, location: @user
     else
-      render json: { errors: [ @user.errors ] }, status: :unprocessable_entity
+      render json: {errors: @user.errors}, status: :unprocessable_entity
     end
   end
 
@@ -51,27 +22,23 @@ class UsersController < ApplicationController
     if @user.update(user_params)
       render json: @user
     else
-      render json: @user.errors, status: :unprocessable_entity
+      render json: {errors: @user.errors}, status: :unprocessable_entity
     end
   end
 
   # DELETE /users/1
   def destroy
-    @user.update(:active => false)
+    @user.destroy
   end
 
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_user
-      if @current_user.staff?
-        @user = User.where(:id => params[:id], :active => true).first
-      else
-        @user = User.where(:id => @current_user.id, :active => true).first
-      end
+      @user = User.find(@current_user.id)
     end
 
     # Only allow a trusted parameter "white list" through.
     def user_params
-      params.require(:data).permit({attributes: [:first_name, :last_name, :email, :phone, :active, :token, :hashed_password, :full_name]})
+      params.require(:data).permit({attributes: [:first_name, :last_name, :email, :password]})
     end
 end

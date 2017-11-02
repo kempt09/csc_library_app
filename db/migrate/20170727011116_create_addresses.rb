@@ -7,7 +7,8 @@ class CreateAddresses < ActiveRecord::Migration[5.1]
       t.string :state, null: false
       t.string :country, null: false, default: 'US'
       t.string :zip, null: false
-      t.references :user, foreign_key: true
+      t.integer :admin_id, null: false
+      t.integer :customer_id, null: false
       t.timestamps
     end
   end
