@@ -42,6 +42,10 @@ class ApplicationController < ActionController::API
 
   def validate_user
     begin
+      if request.headers['Authorization'].nil?
+        render json: { errors: [{ message: 'Missing Authorization In Headers'}]}, status: :unauthorized
+        return
+      end
       token = request.headers['Authorization'].split(' ').last
       user = User.where(token: token).first
       if user == nil
