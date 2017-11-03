@@ -21,6 +21,10 @@ class User < ApplicationRecord
   private
 
   def init_user
+    if self.password.nil? || self.password.length < 8
+      self.errors.add(:password, 'Invalid password must be at least 8 characters in length')
+      throw :abort
+    end
     secret = Rails.application.secrets[:secret_key_base]
     t = Time.now.utc + 5200000
     self.token = JWT.encode({email: self.email, exp: t.to_i}, secret)
